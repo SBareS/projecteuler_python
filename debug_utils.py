@@ -30,3 +30,17 @@ def on_entry_and_exit(on_entry=None, on_exit=None):
             return r
         return wrapper
     return decorator
+
+def output_callcount(step=1):
+    """Decorator. Outputs the callcount every step calls (so as to 
+    indicate progress)."""
+    def decorator(f):
+        n_calls = 0
+        def wrapper(*args, **kwargs):
+            nonlocal n_calls
+            n_calls += 1
+            if n_calls % step == 0:
+                print(n_calls)
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator

@@ -1,7 +1,10 @@
 """Contains some helper functions for modular arithmetic. Also contains 
 a class for numbers mod m which inherits from int."""
 
-from functools import cache
+from functools import cache, reduce
+from itertools import zip_longest
+from digits import digits
+from math import comb
 
 def xgcd(x, y):
     """Returns a tripple (g, s, t) where g = gcd(x, y), and s, t 
@@ -37,7 +40,48 @@ def inverse_table(p, N):
         invs[x] = p - (p//x * invs[p%x] % p)
     return invs
 
-# TODO: CRT
+def crt2(t1, t2):
+    """Given two tuples (m1, a1) and (m2, a2) with m1 and m2 relatively
+    prime, computes 0 <= x < m1*m2 such that x is congruent to ai modulo
+    mi for i=1,2."""
+    m1, a1 = t1
+    m2, a2 = t2
+    g, s, t = xgcd(m1, m2)
+    if g != 1:
+        raise ValueError(f"{m1} and {m2} are not relatively prime.")
+    return (a1 * t * m2 + a2 * s * m1) % (m1 * m2)
+
+def _crt_folder(t1, t2):
+    return (t1[0]*t2[0], crt2(t1, t2))
+
+def crt(L):
+    """Given a list of tuples (mi, ai) with all the m's pairwise 
+    relatively prime, computes 0 <= x < a0 * a1 * .. * an, such 
+    that, x is congruent to ai mod mi for each i."""
+    m, x = reduce(_crt_folder, L)
+    return x
+
+def binom_modp(n, k, p):
+    """Efficiently computes the binomial coefficient n-choose-k modulo
+    a prime p using Lucas' theorem."""
+    if n < 0:
+        raise ValueError("Negative upper indices not supported")
+    if not (0 <= k <= n):
+        return 0
+    
+    n_digs = digits(n, p)[::-1]
+    k_digs = digits(k, p)[::-1]
+    result = 1
+    #for ni, ki in zip_longest(n_digs, k_digs, fillvalue=0):
+    # We don't have to zip_longest, since the filled ki=0 give binomial 
+    # coefficients equal to 1.
+    for ni, ki in zip(n_digs, k_digs):
+        result *= comb(ni, ki) % p
+        result %= p
+        if result == 0:
+            break
+    return result
+
 # TODO: sqrt mod p
 # TODO: hensel-lifting
 

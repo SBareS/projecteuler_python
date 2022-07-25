@@ -77,6 +77,23 @@ def smooth_numbers(primes, upper_bound=None):
                 break
             heappush(heap, (y, p))
 
+def squarefree_numbers(primes, upper_bound=None):
+    """Yelds all square-free numbers (in increasing order) that are
+    only divisible with the primes in the given list. Optionally only
+    yields numbers strictly less than upper_bound, which imrpoves memory
+    usage."""
+    # Implementation is the same as smooth_numbers up to changing a 
+    # single > to >=
+    heap = [(1, inf)]  #x, largest_prime_factor
+    while heap:
+        x, q = heappop(heap)
+        yield x
+        for p in primes:
+            y = p*x
+            if p >= q or (upper_bound and y >= upper_bound):
+                break
+            heappush(heap, (y, p))
+
 class CachedSequence:
     # TODO: 
     #   -Docstring

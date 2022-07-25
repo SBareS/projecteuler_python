@@ -1,7 +1,8 @@
-"""Contains some sequences tools for dealing with sequences."""
+"""Contains some sequences and tools for dealing with sequences."""
 
 from heapq import heapify, heappop, heappush, heapreplace
 from itertools import count, islice
+from math import inf
 
 def nth(s, n):
     """Returns the nth element (zero-indexed) of the sequence s. If s
@@ -61,6 +62,20 @@ def intersection(*seqs):
 #            # One of the sequences ran out, but the others might still 
 #            # have more elements
 #            pass
+
+def smooth_numbers(primes, upper_bound=None):
+    """Yields all numbers (in increasing order) that are only divisble
+    by the primes in the given list. Optionally only yields numbers 
+    strictly less than upper_bound, which improves memory usage."""
+    heap = [(1, inf)]  # x, largest_prime_factor
+    while heap:
+        x, q = heappop(heap)
+        yield x
+        for p in primes:
+            y = p*x
+            if p > q or (upper_bound and y >= upper_bound):
+                break
+            heappush(heap, (y, p))
 
 class CachedSequence:
     # TODO: 

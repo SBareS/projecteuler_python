@@ -27,23 +27,22 @@ width = len(matrix[0])
 # Unlike problems 81 and 82, this one can't (as far as I can tell) be 
 # solved using simple dynamic programming. Instead, we use the full-
 # blown dijkstra-algorithm.
-graph = defaultdict(set, {
-    "source": {WeightedHalfEdge((0,0), 0)},
-    (height-1, width-1): {WeightedHalfEdge("goal", matrix[height-1][width-1])},
-    "goal": set()
+graph = defaultdict(list, {
+    "source": [WeightedHalfEdge((0,0), 0)],
+    (height-1, width-1): [WeightedHalfEdge("goal", matrix[height-1][width-1])],
+    "goal": []
     })
 for r, c in product(range(height), range(width)):
-    edges = set()
+    edges_list = graph[(r, c)]
     weight = matrix[r][c]
     if r > 0:
-        edges.add(WeightedHalfEdge((r - 1, c), weight))
+        edges_list.append(WeightedHalfEdge((r - 1, c), weight))
     if c > 0:
-        edges.add(WeightedHalfEdge((r, c - 1), weight))
+        edges_list.append(WeightedHalfEdge((r, c - 1), weight))
     if r < height - 1:
-        edges.add(WeightedHalfEdge((r + 1, c), weight))
+        edges_list.append(WeightedHalfEdge((r + 1, c), weight))
     if c < width - 1:
-        edges.add(WeightedHalfEdge((r, c + 1), weight))
-    graph[(r, c)] |= edges
+        edges_list.append(WeightedHalfEdge((r, c + 1), weight))
 
 dist, prev = dijkstra(graph, "source", "goal")
 print(dist["goal"])

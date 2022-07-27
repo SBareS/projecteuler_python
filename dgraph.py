@@ -1,9 +1,9 @@
 """Contains some functions for dealing with directed graphs, implemented
-as dictionaries assigning to each vertex a set of HalfEdge-objects, 
-which simply encodes the other vertex of the edge (but, through 
+as dictionaries assigning to each vertex a list of HalfEdge-objects, 
+which simply encodes the other vertex of the edge (but, throug 
 inheritance, might encode additional information). Vertices can be any
-hashable objects, except None which has a special meaning in
-some functions."""
+hashable objects, except None which has a special meaning in some 
+functions."""
 
 from heapq import heapify, heappop, heappush
 from math import inf
@@ -19,7 +19,7 @@ class WeightedHalfEdge(HalfEdge):
         super().__init__(end)
         self.weight = weight
 
-def dijkstra(G : dict[Any, WeightedHalfEdge], source, goal=None):
+def dijkstra(G : dict[Any, list[WeightedHalfEdge]], source, goal=None):
     """Computes the shortest-distance tree rooted at source. G should be
     a weighted graph, i.e. the edges should be of type WeightedEdge. The
     result is a tuple of two dictionaries (dist, prev) associating to 

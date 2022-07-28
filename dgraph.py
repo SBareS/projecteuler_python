@@ -5,6 +5,9 @@ inheritance, might encode additional information). Vertices can be any
 hashable objects, except None which has a special meaning in some 
 functions."""
 
+from itertools import count
+import numpy as np
+
 from heapq import heapify, heappop, heappush
 from math import inf
 
@@ -65,3 +68,27 @@ def dijkstra(G : dict[Any, list[WeightedHalfEdge]], source, goal=None):
                 next_tiebreak += 1
     
     return dist, prev
+
+
+def markov_chain_stationary_distribution(G: dict[Any, list[WeightedHalfEdge]]):
+    """Computes the stationary distribution of a Markov chain (assuming
+    it exists), given as a weighted graph. The result is given as a 
+    dictionary, associating to each state its probability in the 
+    stationary distribution. Uses numpy for the linear-algebra
+    computations."""
+    states = list(G.keys())
+    state_indices = dict(zip(states, count()))
+    n = len(states)
+    transition_matrix = np.zeros((n, n))
+    for j, edges in enumerate(G.values()):
+        for e in edges:
+            i = state_indices[e.end]
+            transition_matrix[i, j] = e.weight
+    
+    eigenvalues, evmatrix = np.linalg.eig(transition_matrix)
+    # Find eigenvector with eigenvalue 1
+    _, result_vector = min(enumerate(evmatrix.transpose()), 
+                            key=lambda x: abs(eigenvalues[x[0]] - 1))
+    
+    result_vector /= sum(result_vector)
+    return dict(zip(states, np.real(result_vector)))

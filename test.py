@@ -43,7 +43,8 @@ if failed_tests:
 
 over_one_minute = [k for k, v in times.items() if v > 60]
 if over_one_minute:
-    print("The following problems took longer than one minute:\n", *over_one_minute, sep=" , ")
+    print("The following problems took longer than one minute:")
+    print(*over_one_minute, sep=" , ")
 else:
     print("All problems solved in less than one minute.")
 

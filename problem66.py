@@ -1,4 +1,4 @@
-"""
+r"""
 Diophantine equation
 Consider quadratic Diophantine equations of the form:
 

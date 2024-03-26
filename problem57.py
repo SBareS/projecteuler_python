@@ -1,4 +1,4 @@
-"""
+r"""
 Square root convergents
 It is possible to show that the square root of two can be expressed as an infinite continued fraction.
 $$\sqrt{2} = 1 + \frac{1}{2 + \frac{1}{2 + \frac{1}{2 + \dots}}}$$

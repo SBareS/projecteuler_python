@@ -1,4 +1,4 @@
-"""
+r"""
 Convergents of e
 The square root of 2 can be written as an infinite continued fraction.
 $$\sqrt{2} = \frac{1}{2 + \frac{1}{2 + \dots}}$$

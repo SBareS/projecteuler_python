@@ -1,4 +1,4 @@
-"""
+r"""
 A huge binomial coefficient
 The binomial coefficient $\binom{10^{18}}{10^9}$ is a number with more 
 than 9 billion ($9 \times 10^9$) digits.

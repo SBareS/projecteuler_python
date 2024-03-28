@@ -4,7 +4,6 @@ functions for dealing with Farey sequences."""
 
 from fractions import Fraction
 from functools import wraps
-from inspect import stack
 from itertools import islice, starmap
 from math import floor, isqrt
 
@@ -68,11 +67,11 @@ def sqrt_cfrac(n):
     if a*a == n:
         return 
     
-    # n is a nun-square, so sqrt(n) is irrational, i.e. the continued 
+    # n is a non-square, so sqrt(n) is irrational, i.e. the continued 
     # fraction expansion is infinite
     while True:
         # This recursion can be obtained rather easily with some 
-        # pen-and-paper calculations in the field Q[sqrt(d)]
+        # pen-and-paper calculations in the field Q(sqrt(d))
         m = d*a - m
         d = (n - m*m)//d
         a = (a0 + m)//d

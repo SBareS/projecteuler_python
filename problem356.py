@@ -33,3 +33,4 @@ for i in range(1, 31):
                  )**N
     result += themat[6] * ZM(2)**(2*i) + themat[7] * ZM(2)**i + themat[8] * 3 - ZM(1)
 print(result)
+correct_answer = "28010159"

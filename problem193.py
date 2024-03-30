@@ -17,4 +17,4 @@ sqrtN = isqrt(N)
 mobius_tab = multfunc_table(mobius_pp, sqrtN + 1)
 
 print(sum(N//k**2 * mobius_tab[k] for k in range(1, sqrtN + 1)))
-correct_result = "684465067343069"
+correct_answer = "684465067343069"

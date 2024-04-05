@@ -108,14 +108,14 @@ def prime_power_factors(n, *, primes, hints):
 def prime_factors(n, *, primes, hints):
     """Returns a list [p1, ..., pr] of all the prime factors of n (with 
     multiplicities), such that n = p1 * ... * pr and p1 <= ... <= pr."""
-    return [p for p, k in prime_power_factors(n, primes, hints) for _ in range(k)]
+    return [p for p, k in prime_power_factors(n, primes=primes, hints=hints) for _ in range(k)]
 
 @_use_default_hints
 @_use_default_primes
 def unique_prime_factors(n, *, primes, hints):
     """Returns a list [p1, ..., pr] of the unique prime factors of n, 
     such that p1 < ... < pr."""
-    return [p for p, k in prime_power_factors(n, primes, hints)]
+    return [p for p, k in prime_power_factors(n, primes=primes, hints=hints)]
 
 def extract_factor(n, d):
     """Redurns (k, u) such that n = d^k*u, and d does not divide u."""

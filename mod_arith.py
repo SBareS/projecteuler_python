@@ -18,21 +18,24 @@ def xgcd(x, y):
         x, y, s1, t1, s2, t2 = y, r, s2, t2, s1 - q*s2, t1 - q*t2
     return (x, s1, t1)
 
-def modinv(m, x):
-    """Computes the inverse of x modulo m, assuming x and m are coprime"""
-    g, s, t = xgcd(m, x)
-    assert g == 1, "m and x should be coprime"
-    return t
+# DEPRECATED: Use pow(x, -1, m) instead
+#def modinv(m, x):
+#    """Computes the inverse of x modulo m, assuming x and m are coprime"""
+#    return pow(x, -1, m)
+#    g, s, t = xgcd(m, x)
+#    assert g == 1, "m and x should be coprime"
+#    return t
 
-def modinv_prime(p, x):
-    """Computes the inverse of x modulo p, assuming p is prime and that
-    p does not divide x. This will usually be quite a bit faster than 
-    modinv(p, x)"""
-    return pow(x, p-2, p)
+# DEPRECATED: Use pow(x, p-2, p) instead
+#def modinv_prime(p, x):
+#    """Computes the inverse of x modulo p, assuming p is prime and that
+#    p does not divide x. This will usually be quite a bit faster than 
+#    modinv(p, x)"""
+#    return pow(x, p-2, p)
 
 def inverse_table(p, N):
     """Computes a table of the inverses of 1,...,N modulo p (with None
-    on the 0th entry). Can be much faster than calling modinv_prime N
+    on the 0th entry). Can be much faster than calling pow(x, -1, p) N
     times. If N is set to None, computes a table of all inverses mod p."""
     invs = (N+1)*[1]
     invs[0] = None
@@ -112,9 +115,9 @@ def ZMod(m) -> type:
         def __pow__(self, n):
             return ZModm(int.__pow__(self, n, m))
         def __truediv__(self, other):
-            return self * modinv(m, other)
+            return self * pow(other, -1, m)
         def __rtruediv__(self, other):
-            return modinv(m, self) * other
+            return pow(self, -1, m) * other
     
     ZModm.__name__ = f"ZMod({m})"
     ZModm.__qualname__ = ''.join([*ZModm.__qualname__.split('.')[:-3], f'ZMod({m})'])

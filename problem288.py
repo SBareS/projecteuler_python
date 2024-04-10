@@ -18,8 +18,6 @@ Find $NF(61,10^7) \mod 61^{10}$
 from itertools import islice
 
 from digits import undigits
-from mod_arith import modinv
-
 
 def rng():
     s = 290797
@@ -36,7 +34,7 @@ modulo = p**modulo_power
 # n!, by using Legendre's formula.
 n_digs = [s % p for s in islice(rng(), q+1)]
 n_mod_modulo = undigits(n_digs[:modulo_power][::-1], p)
-result = (n_mod_modulo - sum(n_digs)) * modinv(modulo, p-1) % modulo
+result = (n_mod_modulo - sum(n_digs)) * pow(p-1, -1, modulo) % modulo
 
 print(result)
 correct_answer = "605857431263981935"

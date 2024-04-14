@@ -98,5 +98,5 @@ def mobius_pp(pk):
     p, k = pk
     return -1 if k == 1 else 0
 def mobius(n):
-    """The mobius functino."""
+    """The mobius function."""
     return prod(map(mobius_pp, prime_power_factors(n)))

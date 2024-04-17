@@ -2,7 +2,8 @@
 
 from collections import defaultdict
 from functools import wraps
-from math import isqrt
+from itertools import product
+from math import isqrt, prod
 
 class FactorizationError(Exception):
     pass
@@ -124,3 +125,22 @@ def extract_factor(n, d):
         u //= d
         k += 1
     return k, u
+
+@_use_default_hints
+@_use_default_primes
+def divisors(n, *, primes, hints):
+    """Returns a list of the divisors of n in increasing order."""
+    if n == 1:
+        return [1]
+    ps, ks = zip(*prime_power_factors(n, primes=primes, hints=hints))
+    pps = []
+    for p, k in zip (ps, ks):
+        pp = []
+        q = 1
+        for r in range(k+1):
+            pp.append(q)
+            q *= p
+        pps.append(pp)
+    result = [prod(qs) for qs in product(*pps)]
+    result.sort()
+    return result

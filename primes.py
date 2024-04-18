@@ -4,6 +4,7 @@ from heapq import heappop, heappush, heappushpop, heapreplace
 from itertools import chain, repeat
 from math import ceil, floor, log
 
+import factorization
 from factorization import extract_factor
 
 # TODO: Hard-coded list of small primes?
@@ -162,7 +163,10 @@ def is_prime(n):
     """Returns True if n is a (probable) prime and False if n is 
     composite. Internally uses a probabilistic test (Miller-Rabin), so
     there is a very small chance of false positives; but the output is
-    guaranteed to be correct for n < 2**64."""
+    guaranteed to be correct for n < 2**64. If prime hints have been generated
+    in the factorization module, those will be used when n is small enough."""
+    if n < len(factorization.default_hints):
+        return factorization.default_hints[n] == n
     if n <= _small_primes[-1]:
         return n in _small_primes
     return all(miller_rabin(n, a) for a in _small_primes)

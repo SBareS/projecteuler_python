@@ -119,7 +119,7 @@ def unique_prime_factors(n, *, primes, hints):
     return [p for p, k in prime_power_factors(n, primes=primes, hints=hints)]
 
 def extract_factor(n, d):
-    """Redurns (k, u) such that n = d^k*u, and d does not divide u."""
+    """Returns (k, u) such that n = d^k*u, and d does not divide u."""
     k, u = 0, n
     while u % d == 0:
         u //= d

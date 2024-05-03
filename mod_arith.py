@@ -4,7 +4,7 @@ a class for numbers mod m which inherits from int."""
 from functools import cache, reduce
 from itertools import zip_longest
 from digits import digits
-from math import comb
+from math import comb, prod
 
 def xgcd(x, y):
     """Returns a tripple (g, s, t) where g = gcd(x, y), and s, t 
@@ -49,20 +49,34 @@ def crt2(t1, t2):
     mi for i=1,2."""
     m1, a1 = t1
     m2, a2 = t2
-    g, s, t = xgcd(m1, m2)
-    if g != 1:
-        raise ValueError(f"{m1} and {m2} are not relatively prime.")
-    return (a1 * t * m2 + a2 * s * m1) % (m1 * m2)
+    #g, s, t = xgcd(m1, m2)
+    #if g != 1:
+    #    raise ValueError(f"{m1} and {m2} are not relatively prime.")
+    #return (a1 * t * m2 + a2 * s * m1) % (m1 * m2)
+    # Using python's builtin modular inverse is quite a bit faster than xgcd
+    return (a1 * pow(m2, -1, m1) * m2 + a2 * pow(m1, -1, m2) * m1) % (m1 * m2)
 
-def _crt_folder(t1, t2):
-    return (t1[0]*t2[0], crt2(t1, t2))
+def orth_idemp(L):
+    """Given a list of pairwise coprime numbers [m1, ..., mn], computes a list
+    of orthogonal idempotents [e1, ..., en] modulo m1*...*mn such that 
+    ei % mj is 1 if i == j and 0 otherwise. The map 
+    (x1, ..., xn) |-> x1*e1 + ... + xn*en
+    thus gives an explicit isomorphism between Z/(m1) x ... x Z/(mn) and
+    Z/(m1*...*mn)."""
+    m = prod(L)
+    return [pow(m // n, -1, n) * (m // n) for n in L]
+
+# def _crt_folder(t1, t2):
+#     return (t1[0]*t2[0], crt2(t1, t2))
 
 def crt(L):
     """Given a list of tuples (mi, ai) with all the m's pairwise 
     relatively prime, computes 0 <= x < a0 * a1 * .. * an, such 
     that, x is congruent to ai mod mi for each i."""
-    m, x = reduce(_crt_folder, L)
-    return x
+    # m, x = reduce(_crt_folder, L)
+    # return x
+    es = orth_idemp([t[0] for t in L])
+    return sum(e * t[1] for (e, t) in zip(es, L)) % prod(t[0] for t in L)
 
 def binom_modp(n, k, p):
     """Efficiently computes the binomial coefficient n-choose-k modulo

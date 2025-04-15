@@ -6,6 +6,8 @@ from itertools import zip_longest
 from digits import digits
 from math import comb, prod
 
+from factorization import extract_factor
+
 def xgcd(x, y):
     """Returns a tripple (g, s, t) where g = gcd(x, y), and s, t 
     satisfy Bezout's identity x*s + y*t == g."""
@@ -99,6 +101,51 @@ def binom_modp(n, k, p):
             break
     return result
 
+def legendre_symbol(x, p):
+    """The legendre symbol (x/p), equal to +1 when x is a quadratic 
+    residue modulo the odd prime p, -1 if it is a nonresidue and 0 if x is zero
+    modulo p."""
+    y = pow(x, (p-1)//2, p)
+    return y if y <= 1 else y - p
+
+def quadratic_nonresidue_modp(p):
+    """Returns a quadratic nonresidue modulo p"""
+    return filter(lambda x: legendre_symbol(x, p) == -1, range(2, p)).__next__()
+
+def sqrt_modp(x, p):
+    """Computes the square roots of x modulo the prime p as a list. Note this
+    list will be empty if x is not a quadratic residue modulo p."""
+    if p == 2:
+        return [x % p]
+    if p % 4 == 3:
+        y = pow(x, (p+1)//4, p)
+    else: # p % 4 == 1, use Tonelli-Shanks 
+        s, q = extract_factor(p-1, 2) # p-1 = 2^s * q
+        z = quadratic_nonresidue_modp(p)
+        (m, c, t, r) = (s, pow(z, q, p), pow(x, q, p), pow(x, (q+1)//2, p))
+        while t > 1:
+            tt = pow(t, 2, p)
+            i = 1
+            while tt != 1:
+                tt = pow(tt, 2, p)
+                i += 1
+            b = c
+            for _ in range(m - i - 1):
+                b = pow(b, 2, p)
+            (m, c) = (i, pow(b, 2, p))
+            (t, r) = (t*c % p, r*b % p)
+        if t == 0:
+            y = 0
+        else: # t == 1
+            y = r
+    
+    if (y**2 - x) % p != 0:
+        return []
+    elif y == 0:
+        return [0]
+    else:
+        return sorted([y, p-y])
+    
 # TODO: sqrt mod p
 # TODO: hensel-lifting
 

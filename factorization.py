@@ -39,7 +39,6 @@ def generate_default_primes_and_hints(limit):
     """Simultaneously generate default primes and default hints. Faster 
     than calling generate_default_primes and generate_default_hints 
     separately."""
-    from primes import eratos_lt
     global default_primes
     generate_default_hints(limit)
     if default_primes and default_primes[-1] >= limit:

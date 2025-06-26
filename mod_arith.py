@@ -1,8 +1,7 @@
 """Contains some helper functions for modular arithmetic. Also contains 
 a class for numbers mod m which inherits from int."""
 
-from functools import cache, reduce
-from itertools import zip_longest
+from functools import cache
 from digits import digits
 from math import comb, prod
 
@@ -146,11 +145,10 @@ def sqrt_modp(x, p):
     else:
         return sorted([y, p-y])
     
-# TODO: sqrt mod p
 # TODO: hensel-lifting
 
 @cache
-def ZMod(m) -> type:
+def ZMod(m: int) -> type:
     """Type of integers modulo m. Note: Even though the type in question
     inherits from int, it performs quite poorly compared to manually 
     modding when needed, since each calculation involves calling a few

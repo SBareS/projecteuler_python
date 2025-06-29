@@ -1,11 +1,12 @@
 """Contains some helper functions for modular arithmetic. Also contains 
 a class for numbers mod m which inherits from int."""
 
+from bisect import insort
 from functools import cache
 from digits import digits
 from math import comb, prod
 
-from factorization import extract_factor
+from factorization import divisors, extract_factor, prime_power_factors
 
 def xgcd(x, y):
     """Returns a tripple (g, s, t) where g = gcd(x, y), and s, t 
@@ -146,6 +147,45 @@ def sqrt_modp(x, p):
         return sorted([y, p-y])
     
 # TODO: hensel-lifting
+
+def order_modp(x, p):
+    """Computes the order of x modulo the prime p, i.e. the smallest positive
+    integer n such that x**n % p == 1."""
+    for d in divisors(p-1):
+        if pow(x, d, p) == 1:
+            return d
+    raise ValueError(f"Need p to be prime and x to be coprime to p")
+
+def order_modppow_pp(x, p, k):
+    """Computes the order of x modulo a prime power p**k, giving the result as
+    its prime factorization as a list of pairs (pi, ki)."""
+    if k == 1:
+        return prime_power_factors(order_modp(x, p))
+    if p == 2 and x % 4 == 3: 
+        # For p = 2 we need divisibility by 4 (not just 2) to use the LTE-lemma
+        x = x**2
+        even_fix = 1
+    else:
+        even_fix = 0
+    
+    n0 = order_modp(x, p)
+    k0 = 1
+    while pow(x, n0, p**(k0 + 1)) == 1:
+        k0 += 1
+    
+    result = prime_power_factors(n0)
+    if k0 < k or even_fix:
+        insort(result, (p, max(k - k0, 0) + even_fix))
+    return result
+
+# TODO: Implement non-huge-prime-power version and general integer version of
+# the above if needed both of which should return integers rather than 
+# prime-power lists
+#
+# def order_modppow(x, p, k):
+#     raise NotImplemented
+# def order_modn(x, n):
+#     raise NotImplemented
 
 @cache
 def ZMod(m: int) -> type:

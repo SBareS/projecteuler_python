@@ -1,6 +1,6 @@
 """
 Hybrid Integers
-An integer of the form $p^q q^p$ with $p\neq q$ prime numbers is
+An integer of the form $p^q q^p$ with p != q prime numbers is
 called a hybrid-integer. For example, $800 = 2^5 5^2$ is a 
 hybrid-integer.
 

@@ -10,9 +10,9 @@ Tn = Sn mod p
 Let Nfac(p,q) be the factorial of N(p,q).
 Let NF(p,q) be the number of factors p in Nfac(p,q).
 
-You are given that $NF(3,10000) \mod 3^{20}=624955285$.
+You are given that $NF(3,10000) \\mod 3^{20}=624955285$.
 
-Find $NF(61,10^7) \mod 61^{10}$
+Find $NF(61,10^7) \\mod 61^{10}$
 """
 
 from itertools import islice

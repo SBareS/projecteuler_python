@@ -2,7 +2,7 @@ r"""
 Largest Roots of Cubic Polynomials
 Let $a_n$ be the largest real root of a polynomial $x^3 - 2^n x^2 + n$.
 For example, $a_2 = 3.86619826...$ Find the last eight digits of
-\sum_{i=1}^{30} \floor{a_i^{987654321}}.
+$\\sum_{i=1}^{30} \\floor{a_i^{987654321}}.$
 
 Note:
 represents the floor function.

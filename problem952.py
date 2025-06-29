@@ -5,7 +5,7 @@ Given a prime p and a positive integer n < p, let R(p, n) be the
 multiplicative order of p modulo n!. In other words, R(p, n) is the minimal 
 positive integer r such that
 
-$$p^r \equiv 1 \pmod{n!}$$
+$$p^r \\equiv 1 \\pmod{n!}$$
 
 For example, R(7, 4) = 2 and R(10^9 + 7, 12) = 17280.
 

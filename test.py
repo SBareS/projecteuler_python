@@ -12,8 +12,8 @@ import os
 import re
 from time import perf_counter
 
-files = [f for f in os.listdir() if re.match(r"problem\d+.py", f)]
-files.sort(key=lambda f: int(re.match(r"problem(\d+).py", f).group(1)))
+files = [f for f in os.listdir() if re.match(r"problemB?\d+|Heegner.py", f)]
+files.sort(key=lambda f: ((m := re.match(r"problem(B?)(\d+).py", f)).group(1), int(m.group(2))))
 
 times = {}
 n_passed = 0

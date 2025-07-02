@@ -2,7 +2,8 @@
 Contains some simple helpers for calculations with quadratic integers.
 """
 
-from numbers import Complex
+from math import sqrt
+from numbers import Complex, Integral
 
 from mod_arith import sqrt_modp
 
@@ -28,38 +29,69 @@ class Zi(tuple[int, int], Complex):
     __slots__ = ()
     def __new__(cls, a, b):
         return super().__new__(cls, (a, b))
+    def __str__(self):
+        a, b = self
+        if a == 0:
+            return f"{b}j"
+        return f"{a}{b:+}j"
+    @property
     def real(self):
         return self[0]
+    @property
     def imag(self):
         return self[1]
     def conjugate(self):
         return Zi(self[0], -self[1])
+    def __complex__(self):
+        return complex(self[0], self[1])
+    def __eq__(self, other):
+        return self[0] == other.real and self[1] == other.imag
+    def __neq__(self, other):
+        return self[0] != other.real or self[1] != other.imag
+    def __abs__(self):
+        return sqrt(self[0]**2 + self[1]**2)
+    def __bool__(self):
+        return self[0] != 0 or self[1] != 0
     def __add__(self, other):
         a, b = self
-        c, d = other if isinstance(other, Zi) else other, 0
+        c, d = other.real, other.imag
         return Zi(a+c, b+d)
     def __radd__(self, other):
-        a, b = other if isinstance(other, Zi) else other, 0
+        a, b = other.real, other.imag
         c, d = self
         return Zi(a+c, b+d)
     def __sub__(self, other):
         a, b = self
-        c, d = other if isinstance(other, Zi) else (other, 0)
+        c, d = other.real, other.imag
         return Zi(a-c, b-d)
     def __rsub__(self, other):
-        a, b = other if isinstance(other, Zi) else (other, 0)
+        a, b = other.real, other.imag
         c, d = self
         return Zi(a-c, b-d)
     def __neg__(self):
-        a, b = self
-        return Zi(-a, -b)
+        return Zi(-self[0], -self[1])
     def __mul__(self, other):
         a, b = self
-        c, d = other if isinstance(other, Zi) else (other, 0)
+        c, d = other.real, other.imag
         return Zi(a*c - b*d, a*d + b*c)
     def __rmul__(self, other):
-        a, b = other if isinstance(other, Zi) else (other, 0)
+        a, b = other.real, other.imag
         c, d = self
         return Zi(a*c - b*d, a*d + b*c)
-    def cast(x):
-        return x if isinstance(x, Zi) else Zi(x, 0)
+    def __truediv__(self, other):
+        return complex(self) / complex(other)
+    def __rtruediv__(self, other):
+        return complex(other) / complex(self)
+    def __pow__(self, exponent):
+        if not isinstance(exponent, Integral) or exponent < 0:
+            return pow(complex(self), exponent)
+        result = Zi(1, 0)
+        selfpow = self
+        while exponent:
+            if exponent & 1:
+                result *= selfpow
+            exponent >>= 1
+            selfpow *= selfpow
+        return result
+    def __rpow__(self, base):
+        return pow(base, complex(self))

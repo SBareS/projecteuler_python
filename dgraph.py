@@ -14,10 +14,12 @@ from math import inf
 from typing import Any
 
 class HalfEdge:
+    __slots__ = "end",
     def __init__(self, end) -> None:
         self.end = end
 
 class WeightedHalfEdge(HalfEdge):
+    __slots__ = "weight",
     def __init__(self, end, weight) -> None:
         super().__init__(end)
         self.weight = weight

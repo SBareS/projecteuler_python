@@ -42,6 +42,7 @@ from collections import Counter
 
 
 class Card:
+    __slots__ = "value", "suit"
     def __init__(self, s : str):
         number, suit = s
         self.value = "123456789TJQKA".index(number)
@@ -62,6 +63,8 @@ class Hand:
     FOUR_OF_A_KIND  = 7
     STRAIGHT_FLUSH  = 8
     # ROYAL_FLUSH     = 9  # Special case of straight flush
+
+    __slots__ = "cards",
 
     def __init__(self, s : str):
         self.cards = list(map(Card, s.split()))

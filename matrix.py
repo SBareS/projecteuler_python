@@ -9,6 +9,7 @@ from typing import Tuple
 @cache
 def Mat22(t) -> type:
     class Mat22t(Tuple[t, t, t, t]):
+        __slots__ = ()
         def __new__(cls, a, b, c, d):
             return tuple.__new__(cls, (a, b, c, d))
         def __add__(self, other):
@@ -50,6 +51,7 @@ def Mat22(t) -> type:
 @cache
 def Mat33(t) -> type:
     class Mat33t(Tuple[t, t, t, t, t, t, t, t, t]):
+        __slots__ = ()
         def __new__(cls, a11, a12, a13, a21, a22, a23, a31, a32, a33):
             return tuple.__new__(cls, (a11, a12, a13, a21, a22, a23, a31, a32, a33))
         def __add__(self, other):

@@ -194,6 +194,7 @@ def ZMod(m: int) -> type:
     modding when needed, since each calculation involves calling a few
     functions in order to create the object."""
     class ZModm(int):
+        __slots__ = ()
         def __new__(cls, x):
             return int.__new__(cls, x % m)
         # NB: in all the below, we call int.foo(self, ...) directly 

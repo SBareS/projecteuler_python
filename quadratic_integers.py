@@ -25,6 +25,7 @@ def prime_sum_of_squares(p):
 # for Problem 273, but doing all the multiplications manually instead sped up
 # everything by a factor of 2 (not surprising, as method calls are sloooow)
 class Zi(tuple[int, int], Complex):
+    __slots__ = ()
     def __new__(cls, a, b):
         return super().__new__(cls, (a, b))
     def real(self):

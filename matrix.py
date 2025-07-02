@@ -31,15 +31,15 @@ def Mat22(t) -> type:
             if n == 0:
                 return self.identity
             if n < 0:
-                raise NotImplementedError
+                return NotImplemented
             if n % 2 == 0:
                 square = self * self
                 return square.__pow__(n // 2)
             return self * self.__pow__(n-1)
         def __truediv__(self, other):
-            raise NotImplementedError
+            return NotImplemented
         def __rtruediv__(self, other):
-            raise NotImplementedError
+            return NotImplemented
     
     Mat22t.identity = Mat22t(1, 0, 0, 1)
     

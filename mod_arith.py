@@ -183,9 +183,9 @@ def order_modppow_pp(x, p, k):
 # prime-power lists
 #
 # def order_modppow(x, p, k):
-#     raise NotImplemented
+#     raise NotImplementedError
 # def order_modn(x, n):
-#     raise NotImplemented
+#     raise NotImplementedError
 
 @cache
 def ZMod(m: int) -> type:

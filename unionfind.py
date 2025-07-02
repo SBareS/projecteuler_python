@@ -47,5 +47,6 @@ class UnionFind:
         return self.data[self.find(x)]
     
     def _join_data(self, d1, d2):
-        raise NotImplemented("join_data should be supplied in the UnionFind "
-                             "constructor, if augmenting sets with data.")
+        raise NotImplementedError(
+            "join_data should be supplied in the UnionFind constructor, if " \
+            "augmenting sets with data.")

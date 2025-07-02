@@ -170,3 +170,27 @@ def is_prime(n):
     if n <= _small_primes[-1]:
         return n in _small_primes
     return all(miller_rabin(n, a) for a in _small_primes)
+
+def merge_prime_powers(pp1, pp2):
+    """
+    Given prime factorizations of two integers (as sorted lists of prime-power
+    pairs (p, k)), returns the prime factorization of their product.
+    """
+    result = []
+    i = j = 0
+    while i < len(pp1) and j < len(pp2):
+        p1, k1 = pp1[i]
+        p2, k2 = pp2[j]
+        if p1 < p2:
+            result.append((p1, k1))
+            i += 1
+        elif p1 > p2:
+            result.append((p2, k2))
+            j += 1
+        else:
+            result.append((p1, k1 + k2))
+            i += 1
+            j += 1
+    result.extend(pp1[i:])
+    result.extend(pp2[j:])
+    return result

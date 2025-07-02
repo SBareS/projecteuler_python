@@ -125,13 +125,13 @@ def extract_factor(n, d):
         k += 1
     return k, u
 
-@_use_default_hints
-@_use_default_primes
-def divisors(n, *, primes, hints):
-    """Returns a list of the divisors of n in increasing order."""
-    if n == 1:
-        return [1]
-    ps, ks = zip(*prime_power_factors(n, primes=primes, hints=hints))
+def divisors_pp(pp):
+    """
+    Given a prime factorized integer (as a list of prime-power pairs (p, k)),
+    returns a list of all divisors of said integer in increasing order."""
+    if not pp:
+        return [1] # Empty product = 1
+    ps, ks = zip(*pp)
     pps = []
     for p, k in zip (ps, ks):
         pp = []
@@ -143,3 +143,11 @@ def divisors(n, *, primes, hints):
     result = [prod(qs) for qs in product(*pps)]
     result.sort()
     return result
+
+@_use_default_hints
+@_use_default_primes
+def divisors(n, *, primes, hints):
+    """Returns a list of the divisors of n in increasing order."""
+    if n == 1:
+        return [1]
+    return divisors_pp(prime_power_factors(n, primes=primes, hints=hints))

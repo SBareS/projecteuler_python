@@ -15,8 +15,7 @@ multiplicative/additive function for the prime power p**k."""
 
 from functools import wraps
 from itertools import count
-from math import isqrt, prod
-from debug_utils import measure_time
+from math import prod
 
 from factorization import prime_power_factors
 from primes import primes_lt
@@ -41,7 +40,7 @@ def addfunct_from_pp(f):
 
 def multfunc_table(f, upper_bound, primes=None):
     """Given a function f taking a tuple (p, k), computes list tab of 
-    length upper_bound whic containing the value of the corresponding
+    length upper_bound containing the value of the corresponding
     multiplicative function. Can optionally be given a list of primes
     less than upper_bound, otherwise these are computed first."""
     if primes == None:

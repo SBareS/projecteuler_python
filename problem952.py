@@ -23,7 +23,7 @@ from primes import is_prime
 p = the_mod = 10**9 + 7
 n = 10**7
 
-factorization.generate_default_primes_and_hints(n)
+factorization.generate_default_hints(n)
 primes = [q for q in range(n+1) if is_prime(q)]
 
 result_pp = defaultdict(int)

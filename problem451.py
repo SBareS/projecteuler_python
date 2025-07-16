@@ -19,12 +19,13 @@ Find the sum of I(n) for 3 <= n <= 2 * 10^7.
 """
 
 from itertools import product
+
 import factorization
 from factorization import prime_power_factors
 from mod_arith import orth_idemp
 
 upper_bound = 2 * 10**7
-factorization.generate_default_primes_and_hints(upper_bound + 1)
+factorization.generate_default_hints(upper_bound + 1)
 
 def mod_selfinv_pp(q):
     if q % 2 == 0:
@@ -38,8 +39,6 @@ def mod_selfinv_pp(q):
 
 result = 0
 for n in range(3, upper_bound + 1):
-    #if n % 100_000 == 0:
-    #    print(n)
     biggest = 1
     pp = [p**k for p, k in prime_power_factors(n)]
     es = orth_idemp(pp)

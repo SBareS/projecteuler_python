@@ -6,7 +6,7 @@ from functools import cache
 from digits import digits
 from math import comb, prod
 
-from factorization import divisors, extract_factor, prime_power_factors
+from factorization import divisors, extract_factor, prime_power_factors, unique_prime_factors
 
 def xgcd(x, y):
     """Returns a tripple (g, s, t) where g = gcd(x, y), and s, t 
@@ -186,6 +186,16 @@ def order_modppow_pp(x, p, k):
 #     raise NotImplementedError
 # def order_modn(x, n):
 #     raise NotImplementedError
+
+def is_primitive_root_modp(x, p):
+    """
+    Tests whether x is a primitive root modulo the prime p, i.e. if it is a 
+    unit of order p-1.
+    """
+    x %= p
+    if x == 0:
+        return False
+    return all(pow(x, (p-1)//q, p) != 1 for q in unique_prime_factors(p-1))
 
 @cache
 def ZMod(m: int) -> type:

@@ -108,6 +108,47 @@ def legendre_symbol(x, p):
     y = pow(x, (p-1)//2, p)
     return y if y <= 1 else y - p
 
+def kronecker_symbol(x, n):
+    """The Kronecker symbol (x/n). If n = u * 2**t * p1**k1 * ... * pr**kr for
+    a unit u and odd primes p1, ..., pr, then 
+    (x/n) = (x/u) * (x/2)**t * (x/p1)**k1 * ... * (x/pr)**kr, where (x/pi) are
+    the usual Legendre symbols for odd primes pi; (x/2) is 0 if x is even, 1 if
+    x is +-1 mod 8 and -1 if x is +-3 mod 8; (x/1) = 1 and (x/-1) is 1 if 
+    x >= 0 and -1 if x < 0. Finally, (x/0) is 1 if x is +-1, otherwise 
+    (x/0) = 0.
+    """    
+    if n == 0:
+        return +1 if x in [+1, -1] else -1
+    if x % 2 == 0 == n % 2:
+        return 0
+    
+    res_sgn = 1
+    
+    if n < 0:
+        n = -n
+        if x < 0:
+            res_sgn = -res_sgn
+    while n % 4 == 0:
+        n //= 4
+    if n % 2 == 0:
+        n //= 2
+        if x % 8 in [3, 5]:
+            res_sgn = -res_sgn
+    
+    x %= n
+    while x:
+        while x % 4 == 0:
+            x //= 4
+        if x % 2 == 0:
+            x //= 2
+            if n % 8 in [3, 5]:
+                res_sgn = -res_sgn
+        x, n = n, x
+        if x % 4 == 3 == n % 4:
+            res_sgn = -res_sgn
+        x %= n
+    return res_sgn if n == 1 else 0
+
 def quadratic_nonresidue_modp(p):
     """Returns a quadratic nonresidue modulo p"""
     return filter(lambda x: legendre_symbol(x, p) == -1, range(2, p)).__next__()

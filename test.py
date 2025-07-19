@@ -29,12 +29,18 @@ for file in files:
         f.seek(0)
         output_lines = list(map(lambda s: s.strip(), f.readlines()))
     
-    if output_lines[-1] == mod.correct_answer:
-        print("OK")
-        n_passed += 1
-    else:
-        print(f"FAILED: expected {mod.correct_answer} but got {output_lines[-1]}")
+    try:
+        correct_answer = mod.correct_answer
+    except ArithmeticError:
+        print(f"MISSING correct_answer. The output was {output_lines[-1]}")
         failed_tests.append(modname)
+    else: 
+        if output_lines[-1] == correct_answer:
+            print("OK")
+            n_passed += 1
+        else:
+            print(f"FAILED: expected {mod.correct_answer} but got {output_lines[-1]}")
+            failed_tests.append(modname)
 
 print(f"{n_passed}/{len(files)} tests passed.")
 if failed_tests:

@@ -10,6 +10,7 @@ import importlib
 from io import StringIO
 import os
 import re
+import sys
 from time import perf_counter
 
 files = [f for f in os.listdir() if re.match(r"problemB?\d+|Heegner.py", f)]
@@ -41,6 +42,9 @@ for file in files:
         else:
             print(f"FAILED: expected {mod.correct_answer} but got {output_lines[-1]}")
             failed_tests.append(modname)
+    
+    # Clean up. Yes this is monstrously cursed, no I'm not going to fix it.
+    del sys.modules[modname]
 
 print(f"{n_passed}/{len(files)} tests passed.")
 if failed_tests:

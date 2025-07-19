@@ -193,16 +193,49 @@ def lucas_probable_prime(n, p, q, discr_kronecker=None):
 
 _small_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
 def is_prime(n):
-    """Returns True if n is a (probable) prime and False if n is 
-    composite. Internally uses a probabilistic test (Miller-Rabin), so
-    there is a very small chance of false positives; but the output is
-    guaranteed to be correct for n < 2**64. If prime hints have been generated
-    in the factorization module, those will be used when n is small enough."""
+    """Returns True if n is a (probable) prime and False (with very high 
+    probability) if n is composite. Internally uses the probabilistic 
+    Braillie-PSW test, which consists of three steps: First do trial division 
+    with some small primes, then do a Miller-Rabin test with witness 2, then 
+    finally do a strong Lucas test with parameters P=1, Q=(1-D)//4 where D is 
+    the first discriminant in the sequence 5, -7, 9, -11, ... having Kronecker
+    symbol (D/n) == -1. It is known that this produces no false positives for 
+    n < 2**64; in fact there are no known composite numbers that pass the test
+    (although infinitely many such pseudoprimes are conjectured to exist)."""
+    # First do O(1) check if we can...
     if n < len(factorization.default_hints):
         return factorization.default_hints[n] == n
+    
+    # ...then check small primes...
     if n <= _small_primes[-1]:
         return n in _small_primes
-    return all(miller_rabin(n, a) for a in _small_primes)
+    if any(n % p == 0 for p in _small_primes):
+        return False
+    
+    # ...then do Baille-PSW, which first consists of Miller-Rabin with 
+    # witness 2...
+    if not miller_rabin(n, 2):
+        return False
+    
+    # ...then a strong Lucas test, for which we first need to ensure that n is
+    # not square...
+    if isqrt(n)**2 == n:
+        return False
+
+    # ... so that we can find a discriminant congruent to 1 mod 4 with 
+    # Kronecker symbol -1...
+    for discr in count(5, 2):
+        if discr % 4 == 3:
+            discr = -discr
+        kron = kronecker_symbol(discr, n)
+        if kron == 0:
+            return False
+        elif kron == -1:
+            # ...on which to do the Lucas test.
+            q = (1 - discr)//4
+            if gcd(n, q) > 1:
+                return False
+            return lucas_probable_prime(n, 1, q, -1)
 
 def merge_prime_powers(pp1, pp2):
     """

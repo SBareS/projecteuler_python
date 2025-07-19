@@ -39,4 +39,4 @@ for n in candidates():
 else:
     print("Ran out of candidates :-(")
 
-correct_result = "892371480"
+correct_answer = "892371480"

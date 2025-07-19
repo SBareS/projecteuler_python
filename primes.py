@@ -1,11 +1,12 @@
 """Contains functions for generating and recognizing primes."""
 
 from heapq import heappop, heappush, heappushpop, heapreplace
-from itertools import chain, repeat
-from math import ceil, floor, log
+from itertools import chain, count, repeat
+from math import ceil, floor, gcd, isqrt, log
 
 import factorization
 from factorization import extract_factor
+from mod_arith import kronecker_symbol
 
 # TODO: Hard-coded list of small primes?
 
@@ -156,6 +157,38 @@ def miller_rabin(n, a):
     # Fermat's Little Theorem, or it is congruent to 1, in which case 
     # we have a square root of one that is not +-1. In either case, n
     # cannot be prime.
+    return False
+
+def lucas_probable_prime(n, p, q, discr_kronecker=None):
+    """Given a number n which is odd and not square, and p, q such that n is 
+    coprime to q and to D = p**2 - 4*q, performs the (strong) Lucas 
+    probable-prime test on n with respect to the Lucas sequences
+    U(p, q) and V(p, q). As part of the test, the Kronecker symbol of D will
+    be computed; if this is already computed beforehand, it can be supplied 
+    with the optional parameter discr_kronecker."""
+    if n % 2 != 1:
+        raise ValueError("n should be odd")
+    discr = (p**2 - 4 * q) % n
+    if discr_kronecker is None:
+        discr_kronecker = kronecker_symbol(discr, n)
+    if discr_kronecker == 0:
+        raise ValueError("n should be coprime to p**2 - 4*q")
+    
+    half = (n - discr_kronecker)//2
+    s, d = extract_factor(n + 1, 2)
+    uu = 1
+    vv = p
+    for i in range(d.bit_length() - 1)[::-1]:
+        uu, vv = uu*vv % n, (vv*vv + discr*uu*uu) * half % n
+        if d & (1<<i):
+            uu, vv = (p*uu + vv) * half % n, (discr*uu + p*vv) * half % n
+    if uu == 0 or (s > 0 and vv == 0):
+        return True
+    
+    for r in range(1, s):
+        uu, vv = uu*vv % n, (vv*vv + discr*uu*uu) * half % n
+        if vv == 0:
+            return True
     return False
 
 _small_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]

@@ -19,7 +19,7 @@ $$ \\oplus 1011_2    $$
 _______________________
 $$         1000101_2 $$
 
-Further we define $P(n) = 11^{\\otimes n} = 11 \\otimes \dots \\otimes 11$. 
+Further we define $P(n) = 11^{\\otimes n} = 11 \\otimes \\dots \\otimes 11$. 
 For example $P(2) = 69$.
 
 Find $P(8^{18} 12^8)$. Give your answer modulo $10^9 + 7$.
